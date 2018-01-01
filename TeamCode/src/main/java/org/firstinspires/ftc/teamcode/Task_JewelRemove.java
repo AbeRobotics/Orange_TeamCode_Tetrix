@@ -27,7 +27,11 @@ public class Task_JewelRemove extends IOPModeTaskBase {
 
 
     @Override
-    public void PerformTask(Telemetry telemetry) {
+    public void PerformTask(Telemetry telemetry, double elapsedTime) {
+        if (elapsedTime > OPModeConstants.RemoveJewel) {
+            taskSatisfied = true;
+            return;
+        }
         OPModeConstants.FireSequence fireSequence = opModeConstants.getFireSequence();
         if( fireSequence != OPModeConstants.FireSequence.UNKNOWN)
         {

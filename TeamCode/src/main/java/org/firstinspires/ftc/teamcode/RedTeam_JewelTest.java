@@ -30,7 +30,7 @@ public class RedTeam_JewelTest extends LinearOpMode{
 
         telemetry.addData("Status", "Initialized");
         opModeConstants.setSelectedTeam(OPModeConstants.SelectedTeam.RED_TEAM);
-        opModeConstants.setOrientation(OPModeConstants.Orientation.FRONT_FACING);
+        opModeConstants.setOrientation(OPModeConstants.Orientation.LEFT_SIDE);
         Servo leftArm = hardwareMap.servo.get("left_arm");
         telemetry.setAutoClear(false);
         ResetToInitialPosition();
@@ -53,7 +53,7 @@ public class RedTeam_JewelTest extends LinearOpMode{
             {
                 telemetry.addData("Wheel Firing Position", opModeConstants.getFireSequence());
                 telemetry.update();
-                jewelRemoved =  jewelDriveMode.performJewelRemovalTask(fireSequence,hardwareMap);
+                jewelRemoved =  jewelDriveMode.performJewelRemovalTask(fireSequence,hardwareMap,telemetry);
             }
             sleep(1000);
         }

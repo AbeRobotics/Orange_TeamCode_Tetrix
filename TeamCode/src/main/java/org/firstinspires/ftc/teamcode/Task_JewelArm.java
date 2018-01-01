@@ -27,7 +27,15 @@ public class Task_JewelArm extends IOPModeTaskBase {
     }
 
     @Override
-    public void PerformTask(Telemetry telemetry) {
+    public void PerformTask(Telemetry telemetry, double elapsedTime) {
+        if ((elapsedTime > OPModeConstants.RaiseArm) && (position == OPModeConstants.jewelKickerArmPosition.ACTION)) {
+            taskSatisfied = true;
+            return;
+        }
+        if ((elapsedTime > OPModeConstants.LowerArm) && (position == OPModeConstants.jewelKickerArmPosition.REST)) {
+            taskSatisfied = true;
+            return;
+        }
         Servo leftArm = hardwareMap.servo.get("left_arm");
         if(position == OPModeConstants.jewelKickerArmPosition.ACTION)
         {

@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public abstract class IOPModeTaskBase {
     public abstract boolean GetTaskStatus();
-    public abstract void PerformTask(Telemetry telemetry);
+    public abstract void PerformTask(Telemetry telemetry, double elapsedTime);
     public abstract void Init();
     public abstract void Reset();
     public final void sleep(long milliseconds) {

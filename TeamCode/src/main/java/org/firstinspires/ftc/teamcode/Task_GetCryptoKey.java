@@ -23,6 +23,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  */
 
 public class Task_GetCryptoKey extends IOPModeTaskBase {
+    private double maxTime = OPModeConstants.ReadPictograph;
     private boolean taskSatisfied = false;
     private OPModeConstants opModeConstants = null;
     private HardwareMap hardwareMap = null;
@@ -42,8 +43,11 @@ public class Task_GetCryptoKey extends IOPModeTaskBase {
     }
 
     @Override
-    public void PerformTask(Telemetry telemetry) {
-
+    public void PerformTask(Telemetry telemetry, double elapsedTime) {
+        if(elapsedTime > maxTime){
+            taskSatisfied = true;
+            return;
+        }
         RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
         if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
             telemetry.addData("Found Relic ",vuMark);

@@ -163,7 +163,7 @@ public class OPModeDriveHelper {
     public void ResetDriveEncoders()
     {
         leftWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
     public double GetPower(OPModeConstants.AutonomousSpeed speed)
     {
@@ -176,6 +176,10 @@ public class OPModeDriveHelper {
 
         return 0.25;
 
+    }
+    public void SetAllStop(){
+        leftWheel.setPower(0);
+        rightWheel.setPower(0);
     }
     public final void sleep(long milliseconds) {
         try {

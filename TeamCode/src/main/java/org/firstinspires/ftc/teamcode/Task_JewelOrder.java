@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  */
 
 public class Task_JewelOrder extends IOPModeTaskBase {
-
+    private double maxTime = OPModeConstants.ReadBallColor;
     private boolean taskSatisfied = false;
     private JewelDetector jewelDetector= null;
     private JewelDetectorFacade jewelDetectorFacade= null;
@@ -29,7 +29,11 @@ public class Task_JewelOrder extends IOPModeTaskBase {
     }
 
     @Override
-    public void PerformTask(Telemetry telemetry) {
+    public void PerformTask(Telemetry telemetry, double elapsedTime) {
+        if(elapsedTime > maxTime){
+            taskSatisfied = true;
+            return;
+        }
         //Sanity Check
          while(opModeConstants.getDetectedOrder() == JewelDetector.JewelOrder.UNKNOWN) {
             JewelDetector.JewelOrder jewelOrder = jewelDetectorFacade.getJewelOrder(jewelDetector);
