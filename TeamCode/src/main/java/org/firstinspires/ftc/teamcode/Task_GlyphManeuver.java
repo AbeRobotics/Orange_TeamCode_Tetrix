@@ -66,8 +66,8 @@ public class Task_GlyphManeuver extends IOPModeTaskBase {
                         break;
                 }
             }
-            taskSatisfied = true;
         }
+        taskSatisfied = true;
     }
 
     @Override

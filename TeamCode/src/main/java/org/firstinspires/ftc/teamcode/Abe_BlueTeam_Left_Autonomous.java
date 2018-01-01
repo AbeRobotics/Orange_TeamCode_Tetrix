@@ -108,7 +108,7 @@ public class Abe_BlueTeam_Left_Autonomous extends LinearOpMode{
 
     }
     private void robotPath(){
-        DriveInstructionsHelper firstAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 24.0d);
+        DriveInstructionsHelper firstAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 6.0d);
         DriveInstructionsHelper secondAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.TURN, 90d);
         LinkedList initPair = new LinkedList<DriveInstructionsHelper>();
         initPair.add(firstAction);

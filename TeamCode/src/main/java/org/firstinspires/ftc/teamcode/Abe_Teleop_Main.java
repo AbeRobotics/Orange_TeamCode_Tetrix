@@ -28,8 +28,8 @@ public class Abe_Teleop_Main extends OpMode
     double leftWheelPower;
     double rightWheelPower;
 
-    double leftArmDefaultPosition = 0.00;
-    double rightArmDefaultPosition = 0.45;
+    double leftArmDefaultPosition = 0.45;
+    double rightArmDefaultPosition = 0.00;
 
     double leftArmPosition = 0.00;
     double rightArmPosition= 0.00;
