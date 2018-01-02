@@ -98,6 +98,72 @@ public class OPModeDriveHelper {
         return Turn(90, speed);
     }
 
+    public boolean Turn(int degrees, OPModeConstants.AutonomousSpeed speed, boolean returnToOriginal){
+        if(!returnToOriginal){
+            return Turn(degrees, speed);
+        }
+        else{
+            opModeConstants.setAutoSpeed(OPModeConstants.AutonomousSpeed.SLOW);
+            ResetDriveEncoders();
+            SetForwardSteering();
+            double inchesToMove = OPModeConstants.degreesToInch * degrees;
+            int ticksToMove = (int)Math.round(OPModeConstants.ticksPerInch * inchesToMove / OPModeConstants.gearRatio);
+            SetClockWiseSteering();
+
+            leftWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftWheel.setTargetPosition(ticksToMove);
+            rightWheel.setTargetPosition(ticksToMove);
+
+            leftWheel.setPower(GetPower(speed));
+            rightWheel.setPower(GetPower(speed));
+
+            int actionCounter = 0;
+            while(leftWheel.isBusy() && actionCounter < 15)
+            {
+                actionCounter++;
+                telemetry.addData("Left Current Position -",leftWheel.getCurrentPosition());
+                telemetry.addData("Right Current Position -",rightWheel.getCurrentPosition());
+                telemetry.update();
+                sleep(200);
+
+
+            }
+            SetAllStop();
+            ////////////Go back to start
+
+
+            //////////////////////////Temp Hack to raise arm///////////////////////
+            Task_JewelArm jewelArm = new Task_JewelArm(hardwareMap, OPModeConstants.jewelKickerArmPosition.REST);
+            jewelArm.Init();
+            jewelArm.PerformTask(telemetry,0);
+            jewelArm.Reset();
+            //////////////////////////////End//////////////////////////////////////
+            leftWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftWheel.setTargetPosition(0);
+            rightWheel.setTargetPosition(0);
+
+            leftWheel.setPower(GetPower(speed));
+            rightWheel.setPower(GetPower(speed));
+
+
+             actionCounter = 0;
+            while(leftWheel.isBusy() && actionCounter < 15)
+            {
+                actionCounter++;
+                telemetry.addData("Left Current Position -",leftWheel.getCurrentPosition());
+                telemetry.addData("Right Current Position -",rightWheel.getCurrentPosition());
+                telemetry.update();
+                sleep(200);
+
+
+            }
+            SetAllStop();
+            ResetDriveEncoders();
+            return true;
+        }
+    }
     public boolean Turn(int degrees, OPModeConstants.AutonomousSpeed speed)
     {
         opModeConstants.setAutoSpeed(OPModeConstants.AutonomousSpeed.SLOW);

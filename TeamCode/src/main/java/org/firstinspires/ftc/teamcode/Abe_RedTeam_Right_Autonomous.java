@@ -133,7 +133,6 @@ public class Abe_RedTeam_Right_Autonomous extends LinearOpMode{
         telemetry.update();
         sleep((30 - (int)getRuntime())*1000);
         //TODO -- Make sure to set motor power to 0 and encoder values to "DO NOT USE ENCODERS"
-
     }
     private void robotPath(RelicRecoveryVuMark vuMark){
         DriveInstructionsHelper firstAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 12.0d);
