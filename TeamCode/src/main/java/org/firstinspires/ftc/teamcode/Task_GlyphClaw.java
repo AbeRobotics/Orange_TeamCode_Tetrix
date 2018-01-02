@@ -14,6 +14,8 @@ public class Task_GlyphClaw extends IOPModeTaskBase {
     private OPModeConstants opModeConstants = null;
     private HardwareMap hardwareMap;
     private OPModeConstants.GlyphClawPosition clawPosition;
+    Servo leftClaw = null;
+    Servo rightClaw = null;
 
     public Task_GlyphClaw(HardwareMap hardwareMap, OPModeConstants.GlyphClawPosition clawPosition)
     {
@@ -28,18 +30,23 @@ public class Task_GlyphClaw extends IOPModeTaskBase {
 
     @Override
     public void PerformTask(Telemetry telemetry, double elapsedTime) {
-        if (elapsedTime > OPModeConstants.ReleaseGlyph) {
+
+        if (elapsedTime > OPModeConstants.ReleaseGlyph && !OPModeConstants.DEBUG && clawPosition== OPModeConstants.GlyphClawPosition.CLOSE) {
             taskSatisfied = true;
             return;
         }
-        Servo leftClaw = hardwareMap.servo.get("left_claw");
-        Servo rightClaw = hardwareMap.servo.get("right_claw");
-        if(opModeConstants.getGlyphClawPosition() == OPModeConstants.GlyphClawPosition.OPEN)
+        if(clawPosition== OPModeConstants.GlyphClawPosition.CLOSE && !OPModeConstants.DEBUG && elapsedTime > OPModeConstants.PickGlyph)
+        {
+            taskSatisfied = true;
+            return;
+        }
+
+        if(clawPosition == OPModeConstants.GlyphClawPosition.CLOSE)
         {
             leftClaw.setPosition(0.35);
             rightClaw.setPosition(0.65);
         }
-        if(opModeConstants.getGlyphClawPosition() == OPModeConstants.GlyphClawPosition.CLOSE)
+        if(clawPosition == OPModeConstants.GlyphClawPosition.OPEN)
         {
             leftClaw.setPosition(0.65);
             rightClaw.setPosition(0.35);
@@ -53,6 +60,8 @@ public class Task_GlyphClaw extends IOPModeTaskBase {
     @Override
     public void Init() {
         opModeConstants = OPModeConstants.getInstance();
+         leftClaw = hardwareMap.servo.get("left_claw");
+         rightClaw = hardwareMap.servo.get("right_claw");
     }
 
     @Override

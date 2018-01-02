@@ -29,53 +29,21 @@ public class JewelDriveMode {
         }
         return jewelDriveInstance;
     }
-    public boolean performJewelRemovalTask(OPModeConstants.FireSequence fireSequence, HardwareMap hardwareMap)
+    public boolean performJewelRemovalTask(OPModeConstants.FireSequence fireSequence, HardwareMap hardwareMap, Telemetry telemetry)
     {
 
-        DcMotor leftWheel;
-        DcMotor rightWheel;
-        leftWheel = hardwareMap.dcMotor.get("left_wheel");
-        rightWheel = hardwareMap.dcMotor.get("right_wheel");
-
-
-        leftWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        int rightWheelPosition = rightWheel.getCurrentPosition();
-        int leftWheelPosition = leftWheel.getCurrentPosition();
-        leftWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftWheel.setPower(0.75);
-        rightWheel.setPower(0.75);
-
-
+        OPModeDriveHelper helper = OPModeDriveHelper.getInstance();
+        helper.Init(telemetry,hardwareMap);
         //FWD - AKA Right wheel negative, left wheel positive
         if(fireSequence == OPModeConstants.FireSequence.FORWARD) {
-            //one rotation
-            leftWheel.setTargetPosition(1440);
-            rightWheel.setTargetPosition(-1440);
+            helper.Turn(35, OPModeConstants.AutonomousSpeed.MEDIUM);
         }
         //Back - AKA Right wheel positive, left wheel negative
         if(fireSequence == OPModeConstants.FireSequence.BACKWARD) {
-            leftWheel.setTargetPosition(-1440);
-            rightWheel.setTargetPosition(1440);
+            helper.Turn(-35, OPModeConstants.AutonomousSpeed.MEDIUM);
         }
 
-        while(leftWheel.isBusy())
-        {
 
-        }
-        leftWheel.setPower(0);
-        rightWheel.setPower(0);
-        leftWheel.setTargetPosition(leftWheelPosition);
-        rightWheel.setTargetPosition(rightWheelPosition);
-        leftWheel.setPower(0.75);
-        rightWheel.setPower(0.75);
-        while(leftWheel.isBusy())
-        {
-
-        }
-        leftWheel.setPower(0);
-        rightWheel.setPower(0);
         return true;
     }
     public void Reset()

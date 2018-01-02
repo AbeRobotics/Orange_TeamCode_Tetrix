@@ -28,16 +28,18 @@ public class Task_JewelRemove extends IOPModeTaskBase {
 
     @Override
     public void PerformTask(Telemetry telemetry, double elapsedTime) {
-        if (elapsedTime > OPModeConstants.RemoveJewel) {
+        if (elapsedTime > OPModeConstants.RemoveJewel && !OPModeConstants.DEBUG) {
             taskSatisfied = true;
             return;
         }
         OPModeConstants.FireSequence fireSequence = opModeConstants.getFireSequence();
         if( fireSequence != OPModeConstants.FireSequence.UNKNOWN)
         {
-            jewelDriveMode.performJewelRemovalTask(fireSequence,hardwareMap);
+            jewelDriveMode.performJewelRemovalTask(fireSequence,hardwareMap,telemetry);
+            taskSatisfied = true;
         }
-        taskSatisfied = true;
+
+
     }
 
     @Override

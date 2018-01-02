@@ -28,11 +28,9 @@ public class Abe_Teleop_Main extends OpMode
     double leftWheelPower;
     double rightWheelPower;
 
-    double leftArmDefaultPosition = 0.45;
-    double rightArmDefaultPosition = 0.00;
+    double leftArmDefaultPosition = 0.70;
 
     double leftArmPosition = 0.00;
-    double rightArmPosition= 0.00;
 
 
     @Override
@@ -63,6 +61,8 @@ public class Abe_Teleop_Main extends OpMode
 
         leftWheel.setPower(leftWheelPower);
         rightWheel.setPower(rightWheelPower);
+
+        leftArm.setPosition(leftArmDefaultPosition);
 
         //Controlling the claw with the triggers
         if(gamepad1.left_trigger > 0.01)

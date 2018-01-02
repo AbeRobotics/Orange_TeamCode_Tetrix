@@ -27,11 +27,12 @@ public class Task_GlyphManeuver extends IOPModeTaskBase {
 
     @Override
     public void PerformTask(Telemetry telemetry, double elapsedTime) {
-        if (drivePath.size() > 2 && elapsedTime > OPModeConstants.GlyphManeuver) {
+
+        if (drivePath.size() > 2 && elapsedTime > OPModeConstants.GlyphManeuver && !OPModeConstants.DEBUG) {
             taskSatisfied = true;
             return;
         }
-        if (drivePath.size() < 3 && elapsedTime > OPModeConstants.PushGlyph) {
+        if (drivePath.size() < 3 && elapsedTime > OPModeConstants.PushGlyph && !OPModeConstants.DEBUG) {
             taskSatisfied = true;
             return;
         }
@@ -49,6 +50,8 @@ public class Task_GlyphManeuver extends IOPModeTaskBase {
                 switch (action){
                     case FORWARD:
                         driveHelper.MoveForward(value);
+                        telemetry.addData("Action = ", action.toString());
+                        telemetry.update();
                         break;
                     case REVERSE:
                         driveHelper.MoveBackward(value);
@@ -65,6 +68,7 @@ public class Task_GlyphManeuver extends IOPModeTaskBase {
                         driveHelper.SetAllStop();
                         break;
                 }
+                drivePath.remove(firstInstruction);
             }
         }
         taskSatisfied = true;

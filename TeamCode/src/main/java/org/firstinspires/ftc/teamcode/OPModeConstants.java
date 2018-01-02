@@ -27,6 +27,7 @@ public class OPModeConstants {
  * Push glyph - 29 sec
  * Step back few inches - 30 sec
      */
+    public static double PickGlyph = 5;
     public static double ReadBallColor = 7;
     public static double ReadPictograph = 10;
     public static double LowerArm = 12;
@@ -34,14 +35,16 @@ public class OPModeConstants {
     public static double RaiseArm = 18;
     public static double GlyphManeuver = 25;
     public static double ReleaseGlyph = 28;
+
     public static double PushGlyph = 29;
     private static OPModeConstants opModeConstants;
     public static double jewelArmActive = 0.52d;
     public static double jewelArmInactive = 0.00d;
-    public static double degreesToInch = 0.209d;
+    public static double degreesToInch = 0.150d;
     public static boolean JewelDetectionDisabled = false;
     public static final double ticksPerInch = 114.67;
     public static final double gearRatio = 0.5;
+    public static boolean DEBUG = true;
     public LinkedList<DriveInstructionsHelper> drivePath = null;
     private OPModeConstants()
     {

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.teamcode.OPModeConstants;
 
 
@@ -31,11 +32,31 @@ public class Abe_BlueTeam_Right_Autonomous extends LinearOpMode{
         telemetry.update();
         opModeConstants.setSelectedTeam(OPModeConstants.SelectedTeam.BLUE_TEAM);
         opModeConstants.setOrientation(OPModeConstants.Orientation.FRONT_FACING);
+        OPModeConstants.DEBUG = false;
+
+        // Get the camera going
         Task_JewelOrder jewelOrder = new Task_JewelOrder(hardwareMap);
         jewelOrder.Init();
 
         waitForStart();
         resetStartTime();
+
+        Task_GlyphClaw pickGlyph = new Task_GlyphClaw(hardwareMap, OPModeConstants.GlyphClawPosition.CLOSE);
+        pickGlyph.Init();
+        while(pickGlyph.GetTaskStatus() == false){
+            pickGlyph.PerformTask(telemetry, getRuntime());
+            sleep(100);
+        }
+        pickGlyph.Reset();
+
+        Task_LiftGlyph liftGlyph = new Task_LiftGlyph(hardwareMap);
+        liftGlyph.Init();
+        while(liftGlyph.GetTaskStatus() ==false)
+        {
+            liftGlyph.PerformTask(telemetry,getRuntime());
+            sleep(200);
+        }
+        liftGlyph.Reset();
 
         while(jewelOrder.GetTaskStatus()==false) {
             jewelOrder.PerformTask(telemetry, getRuntime());
@@ -77,15 +98,14 @@ public class Abe_BlueTeam_Right_Autonomous extends LinearOpMode{
             sleep(100);
         }
         //Robot path is where we set the drive action
-        robotPath();
-
+        robotPath(opModeConstants.getCryptoLocation());
         Task_GlyphManeuver glyphManeuver = new Task_GlyphManeuver(hardwareMap);
         glyphManeuver.Init();
         while(glyphManeuver.GetTaskStatus() == false){
             glyphManeuver.PerformTask(telemetry, getRuntime());
             sleep(100);
         }
-
+        glyphManeuver.Reset();
         Task_GlyphClaw glyphClaw = new Task_GlyphClaw(hardwareMap, OPModeConstants.GlyphClawPosition.OPEN);
         glyphClaw.Init();
         while(glyphClaw.GetTaskStatus() == false){
@@ -93,13 +113,15 @@ public class Abe_BlueTeam_Right_Autonomous extends LinearOpMode{
             sleep(100);
         }
 
-        glyphManeuver.Reset();
         robotPush();
-        glyphManeuver.Init();
-        while(glyphManeuver.GetTaskStatus() == false){
-            glyphManeuver.PerformTask(telemetry, getRuntime());
+        Task_GlyphManeuver pushTask = new Task_GlyphManeuver(hardwareMap);
+        pushTask.Init();
+        while(pushTask.GetTaskStatus() == false){
+            pushTask.PerformTask(telemetry, getRuntime());
             sleep(100);
         }
+        pushTask.Reset();
+
 
         telemetry.addData("Tasks Completed In ", getRuntime());
         telemetry.update();
@@ -107,12 +129,29 @@ public class Abe_BlueTeam_Right_Autonomous extends LinearOpMode{
         //TODO -- Make sure to set motor power to 0 and encoder values to "DO NOT USE ENCODERS"
 
     }
-    private void robotPath(){
-        DriveInstructionsHelper firstAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 6.0d);
+    private void robotPath(RelicRecoveryVuMark vuMark){
+        DriveInstructionsHelper firstAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 12.0d);
         DriveInstructionsHelper secondAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.TURN, 90d);
         LinkedList initPair = new LinkedList<DriveInstructionsHelper>();
         initPair.add(firstAction);
         initPair.add(secondAction);
+        DriveInstructionsHelper vuMarkPosition = null;
+
+        switch (vuMark){
+            case CENTER:
+                vuMarkPosition = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 6.0d);
+                break;
+            case LEFT:
+                vuMarkPosition = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 0.0d);
+                break;
+            case RIGHT:
+                vuMarkPosition = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 12.0d);
+                break;
+            default:
+                vuMarkPosition = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 0.0d);
+                break;
+        }
+        initPair.add(vuMarkPosition);
         opModeConstants.setDrivePath(initPair);
     }
     private void robotPush(){
