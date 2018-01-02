@@ -14,7 +14,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 //@Disabled
 public class Abe_Teleop_Main extends OpMode
 {
-
+    public final void sleep(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
 
     DcMotor leftWheel;
     DcMotor rightWheel;
@@ -23,15 +29,13 @@ public class Abe_Teleop_Main extends OpMode
     Servo leftClaw;
     Servo rightClaw;
     Servo leftArm;
-    Servo rightArm;
 
     double leftWheelPower;
     double rightWheelPower;
 
-    double leftArmDefaultPosition = 0.70;
+    double leftArmDefaultPosition = 0.00;
 
-    double leftArmPosition = 0.00;
-
+    double leftArmPosition = 0.70;
 
     @Override
     public void init()
@@ -94,10 +98,7 @@ public class Abe_Teleop_Main extends OpMode
         if(gamepad1.x)
         {
             leftArm.setPosition(leftArmPosition);
-        }
-        else
-        {
-            leftArm.setPosition(leftArmDefaultPosition);
+            sleep(150000);
         }
     }
 }

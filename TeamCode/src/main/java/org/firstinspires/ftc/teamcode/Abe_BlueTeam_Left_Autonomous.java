@@ -136,9 +136,7 @@ public class Abe_BlueTeam_Left_Autonomous extends LinearOpMode{
         DriveInstructionsHelper secondAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.TURN, 90d);
         LinkedList initPair = new LinkedList<DriveInstructionsHelper>();
         initPair.add(firstAction);
-        initPair.add(secondAction);
         DriveInstructionsHelper vuMarkPosition = null;
-
         switch (vuMark){
             case CENTER:
                 vuMarkPosition = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 6.0d);
@@ -154,6 +152,7 @@ public class Abe_BlueTeam_Left_Autonomous extends LinearOpMode{
                 break;
         }
         initPair.add(vuMarkPosition);
+        initPair.add(secondAction);
         opModeConstants.setDrivePath(initPair);
     }
     private void robotPush(){
