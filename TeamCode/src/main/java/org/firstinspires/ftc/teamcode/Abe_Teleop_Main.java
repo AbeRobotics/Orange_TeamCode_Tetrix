@@ -32,6 +32,9 @@ public class Abe_Teleop_Main extends OpMode
         rightWheel = hardwareMap.dcMotor.get("right_wheel");
         liftMotor = hardwareMap.dcMotor.get("lift_motor");
 
+        leftWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         leftClaw = hardwareMap.servo.get("left_claw");
         rightClaw = hardwareMap.servo.get("right_claw");
         leftArm = hardwareMap.servo.get("left_arm");

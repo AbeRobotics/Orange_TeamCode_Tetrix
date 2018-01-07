@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Rotation;
 import java.util.LinkedList;
 
 /**
- * Created by harsh.joshi on 24-Dec-2017.
+ * Created by akanksha.joshi on 24-Dec-2017.
  */
 @Autonomous(name="Glyph Maneuver Test", group="Autonomous")
 public class Testing_GlyphManeuver extends LinearOpMode {

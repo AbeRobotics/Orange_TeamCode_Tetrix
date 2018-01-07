@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
- * Created by harsh.joshi on 31-Dec-2017.
+ * Created by akanksha.joshi on 31-Dec-2017.
  */
 
 public class Task_GlyphClaw extends IOPModeTaskBase {

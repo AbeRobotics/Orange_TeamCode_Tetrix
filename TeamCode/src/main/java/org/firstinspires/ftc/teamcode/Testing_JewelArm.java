@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.configuration.MotorType;
 import org.firstinspires.ftc.robotcore.external.navigation.Rotation;
 
 /**
- * Created by harsh.joshi on 24-Dec-2017.
+ * Created by akanksha.joshi on 24-Dec-2017.
  */
 @Autonomous(name="Jewel Arm Test", group="Autonomous")
 public class Testing_JewelArm extends LinearOpMode {

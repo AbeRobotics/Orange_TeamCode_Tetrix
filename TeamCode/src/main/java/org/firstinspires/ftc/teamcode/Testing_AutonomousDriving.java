@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 /**
- * Created by harsh.joshi on 25-Dec-2017.
+ * Created by akanksha.joshi on 25-Dec-2017.
  */
 @Autonomous(name="Testing Auto Drive", group="Autonomous")
 public class Testing_AutonomousDriving extends LinearOpMode {

@@ -122,6 +122,13 @@ public class Abe_RedTeam_Left_Autonomous extends LinearOpMode{
             sleep(100);
         }
 
+        Task_LowerGlyph lowerGlyph = new Task_LowerGlyph(hardwareMap);
+        lowerGlyph.Init();
+        while(lowerGlyph.GetTaskStatus() == false){
+            lowerGlyph.PerformTask(telemetry, getRuntime());
+            sleep(100);
+        }
+
         robotPush();
         Task_GlyphManeuver pushTask = new Task_GlyphManeuver(hardwareMap);
         pushTask.Init();

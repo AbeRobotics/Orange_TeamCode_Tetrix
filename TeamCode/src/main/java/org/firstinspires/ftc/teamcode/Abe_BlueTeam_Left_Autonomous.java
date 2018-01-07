@@ -109,6 +109,8 @@ public class Abe_BlueTeam_Left_Autonomous extends LinearOpMode{
             sleep(100);
         }
         glyphManeuver.Reset();
+
+
         Task_GlyphClaw glyphClaw = new Task_GlyphClaw(hardwareMap, OPModeConstants.GlyphClawPosition.OPEN);
         glyphClaw.Init();
         while(glyphClaw.GetTaskStatus() == false){
@@ -116,6 +118,12 @@ public class Abe_BlueTeam_Left_Autonomous extends LinearOpMode{
             sleep(100);
         }
 
+        Task_LowerGlyph lowerGlyph = new Task_LowerGlyph(hardwareMap);
+        lowerGlyph.Init();
+        while(lowerGlyph.GetTaskStatus() == false){
+            lowerGlyph.PerformTask(telemetry, getRuntime());
+            sleep(100);
+        }
 
         robotPush();
         Task_GlyphManeuver pushTask = new Task_GlyphManeuver(hardwareMap);
