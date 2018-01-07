@@ -48,8 +48,8 @@ public class Task_GlyphClaw extends IOPModeTaskBase {
         }
         if(clawPosition == OPModeConstants.GlyphClawPosition.OPEN)
         {
-            leftClaw.setPosition(0.65);
-            rightClaw.setPosition(0.35);
+            leftClaw.setPosition(0.85);
+            rightClaw.setPosition(0.15);
         }
         if(clawPosition != OPModeConstants.GlyphClawPosition.UNKNOWN)
         {

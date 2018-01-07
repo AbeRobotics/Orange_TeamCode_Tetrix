@@ -28,9 +28,13 @@ public class Task_GlyphManeuver extends IOPModeTaskBase {
     @Override
     public void PerformTask(Telemetry telemetry, double elapsedTime) {
 
+        OPModeDriveHelper driveHelper = OPModeDriveHelper.getInstance();
+        driveHelper.Init(telemetry, hardwareMap);
         // more than 2 tasks are for putting glyph in cryptobox - called by glyph maneuver
         if (drivePath.size() > 2 && elapsedTime > OPModeConstants.GlyphManeuver && !OPModeConstants.DEBUG) {
             taskSatisfied = true;
+            driveHelper.SetAllStop();
+            driveHelper.ResetDriveEncoders();
             return;
         }
         // Upgrade if time permits
@@ -41,14 +45,14 @@ public class Task_GlyphManeuver extends IOPModeTaskBase {
             return;
         }
         boolean availableTask = true;
+
+
         while (availableTask){
             DriveInstructionsHelper firstInstruction = drivePath.peekFirst();
             if (firstInstruction == null){
                 availableTask = false;
             }
             else{
-                OPModeDriveHelper driveHelper = OPModeDriveHelper.getInstance();
-                driveHelper.Init(telemetry, hardwareMap);
                 OPModeConstants.DriveInstructions action = firstInstruction.action;
                 double value = firstInstruction.value;
                 switch (action){
@@ -76,6 +80,8 @@ public class Task_GlyphManeuver extends IOPModeTaskBase {
             }
         }
         taskSatisfied = true;
+        driveHelper.SetAllStop();
+        driveHelper.ResetDriveEncoders();
     }
 
     @Override

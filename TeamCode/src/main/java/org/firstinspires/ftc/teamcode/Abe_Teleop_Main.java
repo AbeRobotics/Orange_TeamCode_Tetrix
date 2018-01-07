@@ -44,8 +44,6 @@ public class Abe_Teleop_Main extends OpMode
         leftClaw.setPosition(0.5);
         rightClaw.setPosition(0.5);
 
-
-
         rightWheel.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
@@ -67,22 +65,22 @@ public class Abe_Teleop_Main extends OpMode
         }
         if(gamepad1.right_trigger > 0.01)
         {
-            leftClaw.setPosition(0.65);
-            rightClaw.setPosition(0.35);
+            leftClaw.setPosition(0.85);
+            rightClaw.setPosition(0.15);
         }
 
         //Controlling the lift mechanism using y and a buttons
-        if(gamepad1.y)
+        if(gamepad1.a)
         {
             liftMotor.setPower(1.0);
         }
-        else if(gamepad1.a)
+        else if(gamepad1.y)
         {
             liftMotor.setPower(-1.0);
         }
         else
         {
-
+            liftMotor.setPower(0.0);
         }
 
         //Controlling the arms (will not be used in teleop mode so comment out)
