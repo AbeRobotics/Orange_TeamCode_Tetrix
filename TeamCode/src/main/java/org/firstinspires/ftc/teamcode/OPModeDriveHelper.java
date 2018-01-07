@@ -48,10 +48,11 @@ public class OPModeDriveHelper {
         SetForwardSteering();
         double totalTicks = (OPModeConstants.ticksPerInch * inches / OPModeConstants.gearRatio);
         totalTicks *=-1;
-        leftWheel.setPower(GetPower(speed));
-        rightWheel.setPower(GetPower(speed));
+
         leftWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftWheel.setPower(GetPower(speed));
+        rightWheel.setPower(GetPower(speed));
         leftWheel.setTargetPosition((int)totalTicks);
         rightWheel.setTargetPosition((int)(totalTicks*-1));
         while(leftWheel.isBusy())

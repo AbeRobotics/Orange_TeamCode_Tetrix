@@ -13,6 +13,7 @@ apply from: '../build.common.gradle'
 dependencies {
     implementation project(':openCVLibrary330')
     implementation project(':DogeCV')
+    compile fileTree(dir: 'libs', include: '*.jar')
 }
 android {
     compileSdkVersion 25

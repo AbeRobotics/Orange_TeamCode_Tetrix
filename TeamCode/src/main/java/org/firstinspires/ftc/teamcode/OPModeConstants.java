@@ -201,6 +201,19 @@ public class OPModeConstants {
     }
     public void Reset()
     {
+        LinkedList initPair = new LinkedList<EnumMap<DriveInstructions, Integer>>();
+        initPair.add(new DriveInstructionsHelper(DriveInstructions.UNKNOWN, 0d));
+        setDrivePath(initPair);
+        setFireSequence(FireSequence.UNKNOWN);
+        setSelectedTeam(SelectedTeam.UNKNOWN);
+        setGlyphClawPosition(GlyphClawPosition.UNKNOWN);
+        setDetectedOrder(JewelDetector.JewelOrder.UNKNOWN);
+        setCryptoLocation(RelicRecoveryVuMark.UNKNOWN);
+        setOrientation(Orientation.UNKNOWN);
+        setAutoSpeed(AutonomousSpeed.HIGH);
+        jewelArmActive = 0.52d;
+        jewelArmInactive = 0.00d;
+        JewelDetectionDisabled = false;
         opModeConstants = null;
     }
 }

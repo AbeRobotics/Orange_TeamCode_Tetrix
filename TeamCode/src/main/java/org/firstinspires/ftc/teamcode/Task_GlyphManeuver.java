@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 /**
- * Created by harsh.joshi on 31-Dec-2017.
+ * Created by akanksha.joshi on 31-Dec-2017.
  */
 
 public class Task_GlyphManeuver extends IOPModeTaskBase {
@@ -28,10 +28,14 @@ public class Task_GlyphManeuver extends IOPModeTaskBase {
     @Override
     public void PerformTask(Telemetry telemetry, double elapsedTime) {
 
+        // more than 2 tasks are for putting glyph in cryptobox - called by glyph maneuver
         if (drivePath.size() > 2 && elapsedTime > OPModeConstants.GlyphManeuver && !OPModeConstants.DEBUG) {
             taskSatisfied = true;
             return;
         }
+        // Upgrade if time permits
+        //// Less than 3 task are for jewel removal - we turn and go back to original
+        // call glyph maneuver in jewel removal instead of directly using drive helper
         if (drivePath.size() < 3 && elapsedTime > OPModeConstants.PushGlyph && !OPModeConstants.DEBUG) {
             taskSatisfied = true;
             return;

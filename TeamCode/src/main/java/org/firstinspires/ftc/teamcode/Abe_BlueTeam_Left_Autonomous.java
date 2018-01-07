@@ -25,7 +25,8 @@ public class Abe_BlueTeam_Left_Autonomous extends LinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException {
-
+        Task_ResetAll resetAll = new Task_ResetAll(hardwareMap);
+        resetAll.PerformTask(telemetry,0);
         opModeConstants = OPModeConstants.getInstance();
         telemetry.setAutoClear(false);
         telemetry.addData("Status", "Initialized");

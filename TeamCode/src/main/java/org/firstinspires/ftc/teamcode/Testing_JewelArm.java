@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.configuration.MotorConfigurationType;
 import com.qualcomm.robotcore.hardware.configuration.MotorType;
 
@@ -28,6 +29,7 @@ public class Testing_JewelArm extends LinearOpMode {
         raise.PerformTask(telemetry, getRuntime());
 
         waitForStart();
+
 
 
     }

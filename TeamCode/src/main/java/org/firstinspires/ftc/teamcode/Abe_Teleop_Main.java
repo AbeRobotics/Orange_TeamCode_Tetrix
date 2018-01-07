@@ -14,14 +14,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 //@Disabled
 public class Abe_Teleop_Main extends OpMode
 {
-    public final void sleep(long milliseconds) {
-        try {
-            Thread.sleep(milliseconds);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-    }
-
     DcMotor leftWheel;
     DcMotor rightWheel;
     DcMotor liftMotor;
@@ -33,10 +25,6 @@ public class Abe_Teleop_Main extends OpMode
     double leftWheelPower;
     double rightWheelPower;
 
-    double leftArmDefaultPosition = 0.00;
-
-    double leftArmPosition = 0.70;
-
     @Override
     public void init()
     {
@@ -47,12 +35,13 @@ public class Abe_Teleop_Main extends OpMode
         leftClaw = hardwareMap.servo.get("left_claw");
         rightClaw = hardwareMap.servo.get("right_claw");
         leftArm = hardwareMap.servo.get("left_arm");
+        leftArm.setPosition(0.00);
 
 
         leftClaw.setPosition(0.5);
         rightClaw.setPosition(0.5);
 
-        leftArm.setPosition(leftArmDefaultPosition);
+
 
         rightWheel.setDirection(DcMotorSimple.Direction.REVERSE);
     }
@@ -60,13 +49,12 @@ public class Abe_Teleop_Main extends OpMode
     @Override
     public void loop()
     {
-        leftWheelPower = gamepad1.left_stick_y; //-1 to 0
-        rightWheelPower = gamepad1.right_stick_y;
+        leftWheelPower = gamepad1.right_stick_y; //-1 to 0
+        rightWheelPower = gamepad1.left_stick_y;
 
         leftWheel.setPower(leftWheelPower);
         rightWheel.setPower(rightWheelPower);
 
-        leftArm.setPosition(leftArmDefaultPosition);
 
         //Controlling the claw with the triggers
         if(gamepad1.left_trigger > 0.01)
@@ -91,14 +79,9 @@ public class Abe_Teleop_Main extends OpMode
         }
         else
         {
-            liftMotor.setPower(0);
+
         }
 
         //Controlling the arms (will not be used in teleop mode so comment out)
-        if(gamepad1.x)
-        {
-            leftArm.setPosition(leftArmPosition);
-            sleep(150000);
-        }
     }
 }

@@ -29,7 +29,8 @@ public class Abe_RedTeam_Right_Autonomous extends LinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException {
-
+        Task_ResetAll resetAll = new Task_ResetAll(hardwareMap);
+        resetAll.PerformTask(telemetry,0);
         opModeConstants = OPModeConstants.getInstance();
         telemetry.setAutoClear(false);
         telemetry.addData("Status", "Initialized");
@@ -132,7 +133,7 @@ public class Abe_RedTeam_Right_Autonomous extends LinearOpMode{
         telemetry.addData("Tasks Completed In ", getRuntime());
         telemetry.update();
         sleep((30 - (int)getRuntime())*1000);
-        //TODO -- Make sure to set motor power to 0 and encoder values to "DO NOT USE ENCODERS"
+        //TODO -- Make sure to set motor power to 0 and encoder values to "DO NOT USE ENCODERS" in teleop
     }
     private void robotPath(RelicRecoveryVuMark vuMark){
         DriveInstructionsHelper firstAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 12.0d);
