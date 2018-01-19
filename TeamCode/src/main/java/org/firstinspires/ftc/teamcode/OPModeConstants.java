@@ -27,7 +27,7 @@ public class OPModeConstants {
  * Push glyph - 29 sec
  * Step back few inches - 30 sec
      */
-//Action timings
+    //Action timings
     public static double PickGlyph = 5;
     public static double ReadBallColor = 7;
     public static double ReadPictograph = 10;
@@ -43,18 +43,20 @@ public class OPModeConstants {
     //Jewel arm servo position for "up"
     public static double jewelArmInactive = 0.00d;
     //Degrees to inch value (from conversion)
-    public static double degreesToInch = 0.150d;
-    //Checking if we're looking for the jewels
+    public static double degreesToInch = 0.209d;
+    //Checking if we are looking for the jewels
     public static boolean JewelDetectionDisabled = false;
     //Number of ticks the motor makes per inch
-    public static final double ticksPerInch = 114.67;
-    //Gear ratio (small/big) (40/80)
-    public static final double gearRatio = 0.5;
-    //For debugging
+    public static final double ticksPerInch = 114.67d;
+    //Gear ratio (2:1)
+    public static final double gearRatio = 2.0d;
+    //For debugging, make sure to set it as false in auto classes
     public static boolean DEBUG = true;
-    //Linked list we use for our drive instructions
+    //Degree error allowed (Plus or minus 1 degree)
+    public static final double gyroThreshold = 1.1d;
+    //Linked list used for drive instructions
     public LinkedList<DriveInstructionsHelper> drivePath = null;
-    //Constants we are setting
+    //Setting constants and defaults
     private OPModeConstants()
     {
         LinkedList initPair = new LinkedList<EnumMap<DriveInstructions, Integer>>();
@@ -67,7 +69,7 @@ public class OPModeConstants {
         setCryptoLocation(RelicRecoveryVuMark.UNKNOWN);
         setOrientation(Orientation.UNKNOWN);
         setAutoSpeed(AutonomousSpeed.HIGH);
-        jewelArmActive = 0.52d;
+        jewelArmActive = 0.70d;
         jewelArmInactive = 0.00d;
         JewelDetectionDisabled = false;
     }
@@ -79,7 +81,7 @@ public class OPModeConstants {
         }
         return opModeConstants;
     }
-    //Enum for commands we can give to robot in drivepath
+    //Commands we can give the robot in drive path
     public enum DriveInstructions
     {
         FORWARD,
@@ -87,7 +89,7 @@ public class OPModeConstants {
         TURN,
         UNKNOWN
     }
-    //Enum for the team we are on (RED or BLUE)
+    //The team we are on
     public enum SelectedTeam
     {
         RED_TEAM,
@@ -101,27 +103,27 @@ public class OPModeConstants {
         BACKWARD,
         UNKNOWN
     }
-    //The position of the arm that will come down to remove the jewel
+    //Jewel arm position
     public enum jewelKickerArmPosition
     {
         REST,
         ACTION
     }
-    //Glyph grabbers open/close position
+    //Glyph grabber OPEN/CLOSE position
     public enum GlyphClawPosition
     {
         OPEN,
         CLOSE,
         UNKNOWN
     }
-    //Robot's orientation
+    //Robot position
     public enum Orientation
     {
         FRONT_FACING,
         BACK_FACING,
         UNKNOWN
     }
-    //Auto speeds to choose from: SLOW =  , MEDIUM = 0.75, FAST = 1.0
+    //Auto speeds to choose from: SLOW = 0.5, MEDIUM = 0.75, FAST = 1.0
     public enum AutonomousSpeed
     {
         SLOW,
@@ -130,7 +132,7 @@ public class OPModeConstants {
     }
     //Private variables from enums
     private RelicRecoveryVuMark cryptoLocation;
-    private JewelDetector.JewelOrder jewel_order; //From openCV
+    private JewelDetector.JewelOrder jewel_order;
     private SelectedTeam selectedTeam;
     private FireSequence fireSequence;
     private jewelKickerArmPosition jewelKickerArmPosition;
@@ -143,7 +145,10 @@ public class OPModeConstants {
     {
         return autoSpeed;
     }
-    public void setAutoSpeed(AutonomousSpeed speed) {autoSpeed = speed;}
+    public void setAutoSpeed(AutonomousSpeed speed)
+    {
+        autoSpeed = speed;
+    }
     public void setOrientation (Orientation orientation) {this.orientation = orientation;}
     public Orientation getOrientation(){return orientation;}
     public void setCryptoLocation(RelicRecoveryVuMark cryptoLocation) {this.cryptoLocation = cryptoLocation;}
@@ -194,26 +199,16 @@ public class OPModeConstants {
         }
         return fireSequence;
     }
-    public void setJewelKickerArmPosition(jewelKickerArmPosition position) {jewelKickerArmPosition = position;}
+    public void setJewelKickerArmPosition(jewelKickerArmPosition position)
+    {
+        jewelKickerArmPosition = position;
+    }
     public jewelKickerArmPosition getJewelKickerArmPosition()
     {
         return jewelKickerArmPosition;
     }
     public void Reset()
     {
-        LinkedList initPair = new LinkedList<EnumMap<DriveInstructions, Integer>>();
-        initPair.add(new DriveInstructionsHelper(DriveInstructions.UNKNOWN, 0d));
-        setDrivePath(initPair);
-        setFireSequence(FireSequence.UNKNOWN);
-        setSelectedTeam(SelectedTeam.UNKNOWN);
-        setGlyphClawPosition(GlyphClawPosition.UNKNOWN);
-        setDetectedOrder(JewelDetector.JewelOrder.UNKNOWN);
-        setCryptoLocation(RelicRecoveryVuMark.UNKNOWN);
-        setOrientation(Orientation.UNKNOWN);
-        setAutoSpeed(AutonomousSpeed.HIGH);
-        jewelArmActive = 0.52d;
-        jewelArmInactive = 0.00d;
-        JewelDetectionDisabled = false;
         opModeConstants = null;
     }
 }
