@@ -39,7 +39,7 @@ public class OPModeConstants {
     public static double PushGlyph = 29;
     private static OPModeConstants opModeConstants;
     //Jewel arm servo position for "down"
-    public static double jewelArmActive = 0.52d;
+    public static double jewelArmActive = 0.32d;
     //Jewel arm servo position for "up"
     public static double jewelArmInactive = 0.00d;
     //Degrees to inch value (from conversion)
@@ -47,13 +47,13 @@ public class OPModeConstants {
     //Checking if we are looking for the jewels
     public static boolean JewelDetectionDisabled = false;
     //Number of ticks the motor makes per inch
-    public static final double ticksPerInch = 114.67d;
+    public static final double ticksPerInch = 114.591d;
     //Gear ratio (2:1)
-    public static final double gearRatio = 2.0d;
+    public static final double gearRatio = 1.0d;
     //For debugging, make sure to set it as false in auto classes
     public static boolean DEBUG = true;
     //Degree error allowed (Plus or minus 1 degree)
-    public static final double gyroThreshold = 1.1d;
+    public static final double gyroThreshold = 2.0d;
     //Linked list used for drive instructions
     public LinkedList<DriveInstructionsHelper> drivePath = null;
     //Setting constants and defaults

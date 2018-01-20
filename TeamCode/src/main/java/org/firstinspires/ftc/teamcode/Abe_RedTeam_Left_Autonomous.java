@@ -104,14 +104,25 @@ public class Abe_RedTeam_Left_Autonomous extends LinearOpMode{
         }
 
         //Robot path is where we set the drive action
-        robotPath(opModeConstants.getCryptoLocation());
+      /*  robotPath(opModeConstants.getCryptoLocation());
         Task_GlyphManeuver glyphManeuver = new Task_GlyphManeuver(hardwareMap);
         glyphManeuver.Init();
         if(glyphManeuver.GetTaskStatus() == false){
             glyphManeuver.PerformTask(telemetry, getRuntime());
             sleep(100);
         }
-        glyphManeuver.Reset();
+        glyphManeuver.Reset();*/
+
+        /*start of manually calling gyro method*/
+        OPModeDriveHelper driveHelper = OPModeDriveHelper.getInstance();
+        driveHelper.Init(telemetry,hardwareMap);
+        driveHelper.MoveForward(12.0d);
+        driveHelper.gyroTurn(0.5,90);
+        driveHelper.MoveForward(6.0d);
+        //opModeConstants.getCryptoLocation()
+        //if center add 6 inches
+        //if right add 12 inches
+        //ends here///////////////////////////////////////
 
         Task_GlyphClaw glyphClaw = new Task_GlyphClaw(hardwareMap, OPModeConstants.GlyphClawPosition.OPEN);
         glyphClaw.Init();
@@ -149,7 +160,7 @@ public class Abe_RedTeam_Left_Autonomous extends LinearOpMode{
     }
     private void robotPath(RelicRecoveryVuMark vuMark){
         DriveInstructionsHelper firstAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 12.0d);
-        DriveInstructionsHelper secondAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.TURN, 90d);
+        //DriveInstructionsHelper secondAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.TURN, 90d);
         LinkedList initPair = new LinkedList<DriveInstructionsHelper>();
         initPair.add(firstAction);
         DriveInstructionsHelper vuMarkPosition = null;
@@ -170,7 +181,7 @@ public class Abe_RedTeam_Left_Autonomous extends LinearOpMode{
                 break;
         }
 
-        initPair.add(secondAction);
+        //initPair.add(secondAction);
         opModeConstants.setDrivePath(initPair);
     }
     private void robotPush(){

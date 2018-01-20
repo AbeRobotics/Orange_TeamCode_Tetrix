@@ -34,14 +34,16 @@ public class Testing_GlyphManeuver extends LinearOpMode {
         DriveInstructionsHelper firstAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 24.0d);
         DriveInstructionsHelper secondAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.REVERSE, 24.0d);
         DriveInstructionsHelper thirdAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.TURN, 90d);
-        DriveInstructionsHelper fourthAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.TURN, -90d);
-        DriveInstructionsHelper fifthAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 6.0d);
+        DriveInstructionsHelper fourthAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 6.0d);
+        DriveInstructionsHelper fifthAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.TURN, -90d);
+        DriveInstructionsHelper sixthAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 6.0d);
         LinkedList initPair = new LinkedList<DriveInstructionsHelper>();
         initPair.add(firstAction);
         initPair.add(secondAction);
         initPair.add(thirdAction);
         initPair.add(fourthAction);
         initPair.add(fifthAction);
+        initPair.add(sixthAction);
         OPModeConstants.getInstance().setDrivePath(initPair);
     }
 }

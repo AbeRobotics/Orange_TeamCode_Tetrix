@@ -16,6 +16,7 @@ public class Task_GlyphManeuver extends IOPModeTaskBase {
     private boolean taskSatisfied = false;
     private OPModeConstants opModeConstants = null;
     private HardwareMap hardwareMap;
+    private OPModeGyroHelper gyroHelper;
     LinkedList<DriveInstructionsHelper> drivePath = null;
     public Task_GlyphManeuver(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
@@ -65,7 +66,10 @@ public class Task_GlyphManeuver extends IOPModeTaskBase {
                         driveHelper.MoveBackward(value);
                         break;
                     case TURN:
-                        driveHelper.Turn((int)value, opModeConstants.getAutoSpeed());
+                        gyroHelper.Init(telemetry,hardwareMap);
+                        //double currentPosition = gyroHelper.GetGyroAngle();
+                        driveHelper.Turn((int)value, OPModeConstants.AutonomousSpeed.MEDIUM);
+                        //driveHelper.gyroTurn( 0.5,normalizeAngle(currentPosition+value));
                         break;
                     case UNKNOWN:
                         driveHelper.ResetDriveEncoders();
@@ -88,6 +92,7 @@ public class Task_GlyphManeuver extends IOPModeTaskBase {
     public void Init() {
         opModeConstants = OPModeConstants.getInstance();
         drivePath = opModeConstants.getDrivePath();
+        gyroHelper = OPModeGyroHelper.getInstance();
     }
 
     @Override
@@ -98,5 +103,12 @@ public class Task_GlyphManeuver extends IOPModeTaskBase {
         initPair.add(initEnumMap);
         opModeConstants.setDrivePath(initPair);
         taskSatisfied = false;
+    }
+    private double normalizeAngle(double angle)
+    {
+        double newAngle = angle;
+        while (newAngle <= -180) newAngle += 360;
+        while (newAngle > 180) newAngle -= 360;
+        return newAngle;
     }
 }

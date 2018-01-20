@@ -53,8 +53,8 @@ public class Abe_Teleop_Main extends OpMode
     @Override
     public void loop()
     {
-        leftWheelPower = -gamepad1.right_stick_y; //-1 to 1
-        rightWheelPower = -gamepad1.left_stick_y; //-1 to 1
+        leftWheelPower = gamepad1.right_stick_y; //-1 to 1
+        rightWheelPower = gamepad1.left_stick_y; //-1 to 1
 
         leftWheel.setPower(leftWheelPower);
         rightWheel.setPower(rightWheelPower);
@@ -64,14 +64,14 @@ public class Abe_Teleop_Main extends OpMode
         //Close claw
         if(gamepad1.left_trigger > 0.01)
         {
-            leftClaw.setPosition(0.35);
-            rightClaw.setPosition(0.65);
+            leftClaw.setPosition(0.25);
+            rightClaw.setPosition(0.75);
         }
         //Open claw
         if(gamepad1.right_trigger > 0.01)
         {
-            leftClaw.setPosition(1.00);
-            rightClaw.setPosition(0.00);
+            leftClaw.setPosition(0.85);
+            rightClaw.setPosition(0.15);
         }
 
         //Controlling the lift mechanism using y and a buttons
@@ -87,7 +87,5 @@ public class Abe_Teleop_Main extends OpMode
         {
             liftMotor.setPower(0.0);
         }
-
-        //Controlling the arms (will not be used in teleop mode so comment out)
     }
 }
