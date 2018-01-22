@@ -46,7 +46,7 @@ public class Abe_Teleop_Main extends OpMode
         leftClaw.setPosition(0.5);
         rightClaw.setPosition(0.5);
 
-        leftWheel.setDirection(DcMotorSimple.Direction.FORWARD);
+        //leftWheel.setDirection(DcMotorSimple.Direction.FORWARD);
         rightWheel.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 

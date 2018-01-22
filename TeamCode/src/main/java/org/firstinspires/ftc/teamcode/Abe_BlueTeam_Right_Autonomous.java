@@ -110,9 +110,23 @@ public class Abe_BlueTeam_Right_Autonomous extends LinearOpMode{
         /*start of manually calling gyro method*/
         OPModeDriveHelper driveHelper = OPModeDriveHelper.getInstance();
         driveHelper.Init(telemetry,hardwareMap);
-        driveHelper.MoveForward(12.0d);
+        opModeConstants.getCryptoLocation();
+        RelicRecoveryVuMark vuMark = null;
+        switch (vuMark){
+            case LEFT:
+                driveHelper.MoveForward(0.0);
+                break;
+            case CENTER:
+                driveHelper.MoveForward(6.0);
+                break;
+            case RIGHT:
+                driveHelper.MoveForward(12.0);
+                break;
+            default:
+                driveHelper.MoveForward(0.0);
+                break;
+        }
         driveHelper.gyroTurn(0.5,90);
-        driveHelper.MoveForward(6.0d);
         //opModeConstants.getCryptoLocation()
         //if center add 6 inches
         //if right add 12 inches
