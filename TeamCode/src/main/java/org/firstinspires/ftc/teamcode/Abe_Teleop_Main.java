@@ -43,8 +43,8 @@ public class Abe_Teleop_Main extends OpMode
         //leftArm.setPosition(0.00);
 
 
-        leftClaw.setPosition(0.5);
-        rightClaw.setPosition(0.5);
+        leftClaw.setPosition(0.15);
+        rightClaw.setPosition(0.85);
 
         //leftWheel.setDirection(DcMotorSimple.Direction.FORWARD);
         rightWheel.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -61,17 +61,17 @@ public class Abe_Teleop_Main extends OpMode
 
 
         //Controlling the claw with the triggers
-        //Close claw
+        //Open claw
         if(gamepad1.left_trigger > 0.01)
         {
-            leftClaw.setPosition(0.25);
-            rightClaw.setPosition(0.75);
+            leftClaw.setPosition(0.15);
+            rightClaw.setPosition(0.85);
         }
-        //Open claw
+        //Close claw
         if(gamepad1.right_trigger > 0.01)
         {
-            leftClaw.setPosition(0.85);
-            rightClaw.setPosition(0.15);
+            leftClaw.setPosition(0.55);
+            rightClaw.setPosition(0.45);
         }
 
         //Controlling the lift mechanism using y and a buttons

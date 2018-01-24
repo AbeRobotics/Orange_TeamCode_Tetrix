@@ -104,7 +104,7 @@ public class Abe_RedTeam_Left_Autonomous extends LinearOpMode{
             sleep(100);
         }
 
-        //Robot path is where we set the drive action
+        //Robot path is where we set the drive action...ignore because we are manually calling the gyro method below
       /*  robotPath(opModeConstants.getCryptoLocation());
         Task_GlyphManeuver glyphManeuver = new Task_GlyphManeuver(hardwareMap);
         glyphManeuver.Init();
@@ -112,31 +112,28 @@ public class Abe_RedTeam_Left_Autonomous extends LinearOpMode{
             glyphManeuver.PerformTask(telemetry, getRuntime());
             sleep(100);
         }
-        glyphManeuver.Reset();*/
+        glyphManeuver.Reset();
+        */
 
-        /*start of manually calling gyro method*/
+        /*start of manually calling gyro method (This would be our glyph maneuver)*/
         OPModeDriveHelper driveHelper = OPModeDriveHelper.getInstance();
         driveHelper.Init(telemetry,hardwareMap);
         opModeConstants.getCryptoLocation();
-        RelicRecoveryVuMark vuMark = null;
-        switch (vuMark){
+        switch (opModeConstants.getCryptoLocation()){
             case LEFT:
-                driveHelper.MoveBackward(0.0);
+                driveHelper.MoveBackward(0.0d);
                 break;
             case CENTER:
-                driveHelper.MoveBackward(6.0);
+                driveHelper.MoveBackward(6.0d);
                 break;
             case RIGHT:
-                driveHelper.MoveBackward(12.0);
+                driveHelper.MoveBackward(12.0d);
                 break;
             default:
-                driveHelper.MoveBackward(0.0);
+                driveHelper.MoveBackward(0.0d);
                 break;
         }
         driveHelper.gyroTurn(0.5,90);
-        //opModeConstants.getCryptoLocation()
-        //if center add 6 inches
-        //if right add 12 inches
         //ends here///////////////////////////////////////
 
         Task_GlyphClaw glyphClaw = new Task_GlyphClaw(hardwareMap, OPModeConstants.GlyphClawPosition.OPEN);
@@ -201,8 +198,10 @@ public class Abe_RedTeam_Left_Autonomous extends LinearOpMode{
     }
     private void robotPush(){
         DriveInstructionsHelper pushAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 6.0d);
+        DriveInstructionsHelper backUp = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.REVERSE, 6.0d);
         LinkedList initPair = new LinkedList<DriveInstructionsHelper>();
         initPair.add(pushAction);
+        initPair.add(backUp);
         opModeConstants.setDrivePath(initPair);
     }
 
