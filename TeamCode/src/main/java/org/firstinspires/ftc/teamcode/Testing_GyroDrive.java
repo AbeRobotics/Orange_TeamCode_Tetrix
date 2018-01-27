@@ -14,13 +14,19 @@ public class Testing_GyroDrive extends LinearOpMode {
 
         OPModeConstants opModeConstants = OPModeConstants.getInstance();
         OPModeDriveHelper driveHelper = OPModeDriveHelper.getInstance();
+        OPModeGyroHelper gyroHelper = OPModeGyroHelper.getInstance();
         driveHelper.Init(telemetry, hardwareMap);
 
         waitForStart();
+        //driveHelper.MoveForward(12.0d, OPModeConstants.AutonomousSpeed.SLOW);
+        //sleep(1000);
         driveHelper.gyroTurn(0.3,45);
         sleep(1000);
         driveHelper.gyroTurn(0.3,-90);
         sleep(1000);
+
+
+
 
 
         /* driveHelper.gyroDrive(0.5,-45,0);

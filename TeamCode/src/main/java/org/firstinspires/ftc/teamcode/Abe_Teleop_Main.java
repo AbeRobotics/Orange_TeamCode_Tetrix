@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 /**
  * Created by 500260501 on 13/11/2017.
@@ -26,6 +27,8 @@ public class Abe_Teleop_Main extends OpMode
 
     double leftWheelPower;
     double rightWheelPower;
+
+    double yValue, xValue;
 
     @Override
     public void init()
@@ -53,11 +56,20 @@ public class Abe_Teleop_Main extends OpMode
     @Override
     public void loop()
     {
-        leftWheelPower = gamepad1.right_stick_y; //-1 to 1
-        rightWheelPower = gamepad1.left_stick_y; //-1 to 1
+        //leftWheelPower = gamepad1.right_stick_y; //-1 to 1
+        //rightWheelPower = gamepad1.left_stick_y; //-1 to 1
+        yValue = gamepad1.left_stick_y;
+        xValue = gamepad1.right_stick_x;
 
-        leftWheel.setPower(leftWheelPower);
-        rightWheel.setPower(rightWheelPower);
+        leftWheelPower =  yValue + xValue;
+        rightWheelPower = yValue - xValue;
+
+        leftWheel.setPower(Range.clip(leftWheelPower, -1.0, 1.0));
+        rightWheel.setPower(Range.clip(rightWheelPower, -1.0, 1.0));
+
+
+        //leftWheel.setPower(leftWheelPower);
+        //rightWheel.setPower(rightWheelPower);
 
 
         //Controlling the claw with the triggers
@@ -70,8 +82,8 @@ public class Abe_Teleop_Main extends OpMode
         //Close claw
         if(gamepad1.right_trigger > 0.01)
         {
-            leftClaw.setPosition(0.55);
-            rightClaw.setPosition(0.45);
+            leftClaw.setPosition(0.65);
+            rightClaw.setPosition(0.35);
         }
 
         //Controlling the lift mechanism using y and a buttons

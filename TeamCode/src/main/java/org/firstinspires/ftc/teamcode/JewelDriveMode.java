@@ -36,13 +36,13 @@ public class JewelDriveMode {
         helper.Init(telemetry,hardwareMap);
         //FWD - AKA Right wheel negative, left wheel positive
         if(fireSequence == OPModeConstants.FireSequence.FORWARD) {
-            helper.Turn(45, OPModeConstants.AutonomousSpeed.MEDIUM,true);
+            helper.Turn(25, OPModeConstants.AutonomousSpeed.SLOW,true);
 
 
         }
         //Back - AKA Right wheel positive, left wheel negative
         if(fireSequence == OPModeConstants.FireSequence.BACKWARD) {
-            helper.Turn(-45, OPModeConstants.AutonomousSpeed.MEDIUM,true);
+            helper.Turn(-25, OPModeConstants.AutonomousSpeed.SLOW,true);
 
         }
 

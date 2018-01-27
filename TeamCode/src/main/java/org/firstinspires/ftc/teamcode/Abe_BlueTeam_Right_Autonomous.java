@@ -35,19 +35,20 @@ public class Abe_BlueTeam_Right_Autonomous extends LinearOpMode{
         OPModeConstants.DEBUG = false;
 
         // Get the camera going
+
         Task_JewelOrder jewelOrder = new Task_JewelOrder(hardwareMap);
         jewelOrder.Init();
 
         waitForStart();
         resetStartTime();
 
-        Task_GlyphClaw pickGlyph = new Task_GlyphClaw(hardwareMap, OPModeConstants.GlyphClawPosition.CLOSE);
-        pickGlyph.Init();
-        while(pickGlyph.GetTaskStatus() == false){
-            pickGlyph.PerformTask(telemetry, getRuntime());
-            sleep(100);
-        }
-        pickGlyph.Reset();
+       Task_GlyphClaw pickGlyph = new Task_GlyphClaw(hardwareMap, OPModeConstants.GlyphClawPosition.CLOSE);
+       pickGlyph.Init();
+       while(pickGlyph.GetTaskStatus() == false){
+           pickGlyph.PerformTask(telemetry, getRuntime());
+           sleep(100);
+       }
+       pickGlyph.Reset();
 
         Task_LiftGlyph liftGlyph = new Task_LiftGlyph(hardwareMap);
         liftGlyph.Init();
@@ -74,6 +75,7 @@ public class Abe_BlueTeam_Right_Autonomous extends LinearOpMode{
         }
         telemetry.addData("Crypto Location ",opModeConstants.getCryptoLocation());
         telemetry.update();
+
         Task_JewelArm jewelArm = new Task_JewelArm(hardwareMap, OPModeConstants.jewelKickerArmPosition.ACTION);
         jewelArm.Init();
         while(jewelArm.GetTaskStatus()==false)
@@ -83,6 +85,7 @@ public class Abe_BlueTeam_Right_Autonomous extends LinearOpMode{
         }
         telemetry.addData("Fire Sequence ",opModeConstants.getFireSequence().toString());
         telemetry.update();
+
         Task_JewelRemove jewelRemove = new Task_JewelRemove(hardwareMap);
         jewelRemove.Init();
         while(jewelRemove.GetTaskStatus() == false) {
@@ -90,43 +93,28 @@ public class Abe_BlueTeam_Right_Autonomous extends LinearOpMode{
             sleep(100);
         }
 
-        jewelArm = new Task_JewelArm(hardwareMap, OPModeConstants.jewelKickerArmPosition.REST);
-        jewelArm.Init();
-        while(jewelArm.GetTaskStatus()==false)
-        {
-            jewelArm.PerformTask(telemetry, getRuntime());
-            sleep(100);
-        }
-        //Robot path is where we set the drive action...ignore because we are manually calling the gyro method below
-      /*  robotPath(opModeConstants.getCryptoLocation());
-        Task_GlyphManeuver glyphManeuver = new Task_GlyphManeuver(hardwareMap);
-        glyphManeuver.Init();
-        if(glyphManeuver.GetTaskStatus() == false){
-            glyphManeuver.PerformTask(telemetry, getRuntime());
-            sleep(100);
-        }
-        glyphManeuver.Reset();
-        */
 
         /*start of manually calling gyro method (This would be our glyph maneuver)*/
         OPModeDriveHelper driveHelper = OPModeDriveHelper.getInstance();
         driveHelper.Init(telemetry,hardwareMap);
-        opModeConstants.getCryptoLocation();
+        //Comment for competition
+        opModeConstants.setAutoSpeed(OPModeConstants.AutonomousSpeed.SLOW);
         switch (opModeConstants.getCryptoLocation()){
             case LEFT:
-                driveHelper.MoveForward(0.0d);
+                driveHelper.MoveForward(30.0d);
                 break;
             case CENTER:
-                driveHelper.MoveForward(6.0d);
+                driveHelper.MoveForward(36.0d);
                 break;
             case RIGHT:
-                driveHelper.MoveForward(12.0d);
+                driveHelper.MoveForward(42.0d);
                 break;
             default:
-                driveHelper.MoveForward(0.0d);
+                driveHelper.MoveForward(6.0d);
                 break;
         }
-        driveHelper.gyroTurn(0.5,90);
+        //
+        driveHelper.gyroTurn(0.3,90);
         //ends here///////////////////////////////////////
 
         Task_GlyphClaw glyphClaw = new Task_GlyphClaw(hardwareMap, OPModeConstants.GlyphClawPosition.OPEN);
@@ -143,14 +131,8 @@ public class Abe_BlueTeam_Right_Autonomous extends LinearOpMode{
             sleep(100);
         }
 
-        robotPush();
-        Task_GlyphManeuver pushTask = new Task_GlyphManeuver(hardwareMap);
-        pushTask.Init();
-        if(pushTask.GetTaskStatus() == false){
-            pushTask.PerformTask(telemetry, getRuntime());
-            sleep(100);
-        }
-        pushTask.Reset();
+        driveHelper.MoveForward(6.0d);
+        driveHelper.MoveBackward(3.0d);
 
 
         telemetry.addData("Tasks Completed In ", getRuntime());
@@ -164,40 +146,8 @@ public class Abe_BlueTeam_Right_Autonomous extends LinearOpMode{
         //TODO -- Make sure to set motor power to 0 and encoder values to "DO NOT USE ENCODERS"
 
     }
-    private void robotPath(RelicRecoveryVuMark vuMark){
-        DriveInstructionsHelper firstAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 12.0d);
-        //DriveInstructionsHelper secondAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.TURN, 90d);
-        LinkedList initPair = new LinkedList<DriveInstructionsHelper>();
-        initPair.add(firstAction);
-        DriveInstructionsHelper vuMarkPosition = null;
-        switch (vuMark){
-            case CENTER:
-                vuMarkPosition = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 6.0d);
-                initPair.add(vuMarkPosition);
-                break;
-            case LEFT:
-                vuMarkPosition = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 0.0d);
-                break;
-            case RIGHT:
-                vuMarkPosition = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 12.0d);
-                initPair.add(vuMarkPosition);
-                break;
-            default:
-                vuMarkPosition = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 0.0d);
-                break;
-        }
 
-        //initPair.add(secondAction);
-        opModeConstants.setDrivePath(initPair);
-    }
-    private void robotPush() {
-        DriveInstructionsHelper pushAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 6.0d);
-        DriveInstructionsHelper backUp = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.REVERSE, 6.0d);
-        LinkedList initPair = new LinkedList<DriveInstructionsHelper>();
-        initPair.add(pushAction);
-        initPair.add(backUp);
-        opModeConstants.setDrivePath(initPair);
-    }
+
 }
 
 

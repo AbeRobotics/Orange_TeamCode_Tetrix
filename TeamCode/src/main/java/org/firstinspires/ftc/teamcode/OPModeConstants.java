@@ -47,7 +47,7 @@ public class OPModeConstants {
     //Checking if we are looking for the jewels
     public static boolean JewelDetectionDisabled = false;
     //Number of ticks the motor makes per inch
-    public static final double ticksPerInch = 114.591d;
+    public static final double ticksPerInch = 90.541d;
     //Gear ratio (2:1)
     public static final double gearRatio = 1.0d;
     //For debugging, make sure to set it as false in auto classes
