@@ -6,8 +6,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
  * Created by akanksha.joshi on 2018-01-06.
- * Reset the shit out of everything
- * F***ing encoders not getting reset - this is the last ditch effort!!
+ * Reset everything!!!
+ * Encoders not getting reset - this is the last ditch effort!!
  */
 
 public class Task_ResetAll extends IOPModeTaskBase {
