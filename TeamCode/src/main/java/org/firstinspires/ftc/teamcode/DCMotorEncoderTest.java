@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Rotation;
  * Created by harsh.joshi on 24-Dec-2017.
  */
 @Autonomous(name="Encoder Test", group="Autonomous")
-public class Testing_DCMotorEncoder extends LinearOpMode {
+public class DCMotorEncoderTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 

@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.teamcode.OPModeConstants;
 
 
@@ -32,32 +31,11 @@ public class Abe_BlueTeam_Right_Autonomous extends LinearOpMode{
         telemetry.update();
         opModeConstants.setSelectedTeam(OPModeConstants.SelectedTeam.BLUE_TEAM);
         opModeConstants.setOrientation(OPModeConstants.Orientation.FRONT_FACING);
-        OPModeConstants.DEBUG = false;
-
-        // Get the camera going
-
         Task_JewelOrder jewelOrder = new Task_JewelOrder(hardwareMap);
         jewelOrder.Init();
 
         waitForStart();
         resetStartTime();
-
-       Task_GlyphClaw pickGlyph = new Task_GlyphClaw(hardwareMap, OPModeConstants.GlyphClawPosition.CLOSE);
-       pickGlyph.Init();
-       while(pickGlyph.GetTaskStatus() == false){
-           pickGlyph.PerformTask(telemetry, getRuntime());
-           sleep(100);
-       }
-       pickGlyph.Reset();
-
-        Task_LiftGlyph liftGlyph = new Task_LiftGlyph(hardwareMap);
-        liftGlyph.Init();
-        while(liftGlyph.GetTaskStatus() ==false)
-        {
-            liftGlyph.PerformTask(telemetry,getRuntime());
-            sleep(200);
-        }
-        liftGlyph.Reset();
 
         while(jewelOrder.GetTaskStatus()==false) {
             jewelOrder.PerformTask(telemetry, getRuntime());
@@ -75,7 +53,6 @@ public class Abe_BlueTeam_Right_Autonomous extends LinearOpMode{
         }
         telemetry.addData("Crypto Location ",opModeConstants.getCryptoLocation());
         telemetry.update();
-
         Task_JewelArm jewelArm = new Task_JewelArm(hardwareMap, OPModeConstants.jewelKickerArmPosition.ACTION);
         jewelArm.Init();
         while(jewelArm.GetTaskStatus()==false)
@@ -85,7 +62,6 @@ public class Abe_BlueTeam_Right_Autonomous extends LinearOpMode{
         }
         telemetry.addData("Fire Sequence ",opModeConstants.getFireSequence().toString());
         telemetry.update();
-
         Task_JewelRemove jewelRemove = new Task_JewelRemove(hardwareMap);
         jewelRemove.Init();
         while(jewelRemove.GetTaskStatus() == false) {
@@ -93,29 +69,22 @@ public class Abe_BlueTeam_Right_Autonomous extends LinearOpMode{
             sleep(100);
         }
 
-
-        /*start of manually calling gyro method (This would be our glyph maneuver)*/
-        OPModeDriveHelper driveHelper = OPModeDriveHelper.getInstance();
-        driveHelper.Init(telemetry,hardwareMap);
-        //Comment for competition
-        opModeConstants.setAutoSpeed(OPModeConstants.AutonomousSpeed.SLOW);
-        switch (opModeConstants.getCryptoLocation()){
-            case LEFT:
-                driveHelper.MoveForward(30.0d);
-                break;
-            case CENTER:
-                driveHelper.MoveForward(36.0d);
-                break;
-            case RIGHT:
-                driveHelper.MoveForward(42.0d);
-                break;
-            default:
-                driveHelper.MoveForward(6.0d);
-                break;
+        jewelArm = new Task_JewelArm(hardwareMap, OPModeConstants.jewelKickerArmPosition.REST);
+        jewelArm.Init();
+        while(jewelArm.GetTaskStatus()==false)
+        {
+            jewelArm.PerformTask(telemetry, getRuntime());
+            sleep(100);
         }
-        //
-        driveHelper.gyroTurn(0.3,90);
-        //ends here///////////////////////////////////////
+        //Robot path is where we set the drive action
+        robotPath();
+
+        Task_GlyphManeuver glyphManeuver = new Task_GlyphManeuver(hardwareMap);
+        glyphManeuver.Init();
+        while(glyphManeuver.GetTaskStatus() == false){
+            glyphManeuver.PerformTask(telemetry, getRuntime());
+            sleep(100);
+        }
 
         Task_GlyphClaw glyphClaw = new Task_GlyphClaw(hardwareMap, OPModeConstants.GlyphClawPosition.OPEN);
         glyphClaw.Init();
@@ -124,30 +93,34 @@ public class Abe_BlueTeam_Right_Autonomous extends LinearOpMode{
             sleep(100);
         }
 
-        Task_LowerGlyph lowerGlyph = new Task_LowerGlyph(hardwareMap);
-        lowerGlyph.Init();
-        while(lowerGlyph.GetTaskStatus() == false){
-            lowerGlyph.PerformTask(telemetry, getRuntime());
+        glyphManeuver.Reset();
+        robotPush();
+        glyphManeuver.Init();
+        while(glyphManeuver.GetTaskStatus() == false){
+            glyphManeuver.PerformTask(telemetry, getRuntime());
             sleep(100);
         }
-
-        driveHelper.MoveForward(6.0d);
-        driveHelper.MoveBackward(3.0d);
-
 
         telemetry.addData("Tasks Completed In ", getRuntime());
         telemetry.update();
         sleep((30 - (int)getRuntime())*1000);
-
-        Task_ResetAll resetAll = new Task_ResetAll(hardwareMap);
-        resetAll.Init();
-        resetAll.PerformTask(telemetry,0);
-
         //TODO -- Make sure to set motor power to 0 and encoder values to "DO NOT USE ENCODERS"
 
     }
-
-
+    private void robotPath(){
+        DriveInstructionsHelper firstAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 24.0d);
+        DriveInstructionsHelper secondAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.TURN, 90d);
+        LinkedList initPair = new LinkedList<DriveInstructionsHelper>();
+        initPair.add(firstAction);
+        initPair.add(secondAction);
+        opModeConstants.setDrivePath(initPair);
+    }
+    private void robotPush(){
+        DriveInstructionsHelper pushAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 6.0d);
+        LinkedList initPair = new LinkedList<DriveInstructionsHelper>();
+        initPair.add(pushAction);
+        opModeConstants.setDrivePath(initPair);
+    }
 }
 
 

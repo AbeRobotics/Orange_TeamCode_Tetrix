@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import java.io.IOException;
-import java.util.LinkedList;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.OPModeConstants;
@@ -16,11 +15,12 @@ import org.firstinspires.ftc.teamcode.OPModeConstants;
 /**
  * Created by Akanksha.Joshi on 23-Dec-2017.
  */
-@Autonomous(name="Blue Team Left", group="Autonomous")
-public class Abe_BlueTeam_Left_Autonomous extends LinearOpMode{
+@Autonomous(name="Jewel Task Blue Team", group="Autonomous")
+public class Abe_BlueTeam_Autonomous extends LinearOpMode{
 
     private OPModeConstants opModeConstants = null;
     private ElapsedTime runtime = new ElapsedTime();
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -38,7 +38,7 @@ public class Abe_BlueTeam_Left_Autonomous extends LinearOpMode{
         resetStartTime();
 
         while(jewelOrder.GetTaskStatus()==false) {
-            jewelOrder.PerformTask(telemetry, getRuntime());
+            jewelOrder.PerformTask(telemetry);
             sleep(100);
         }
         telemetry.addData("Jewel Order ",opModeConstants.getDetectedOrder().toString());
@@ -47,7 +47,7 @@ public class Abe_BlueTeam_Left_Autonomous extends LinearOpMode{
         getCryptoKey.Init();
         while(getCryptoKey.GetTaskStatus() == false)
         {
-            getCryptoKey.PerformTask(telemetry, getRuntime());
+            getCryptoKey.PerformTask(telemetry);
             sleep(100);
 
         }
@@ -57,7 +57,7 @@ public class Abe_BlueTeam_Left_Autonomous extends LinearOpMode{
         jewelArm.Init();
         while(jewelArm.GetTaskStatus()==false)
         {
-            jewelArm.PerformTask(telemetry, getRuntime());
+            jewelArm.PerformTask(telemetry);
             sleep(100);
         }
         telemetry.addData("Fire Sequence ",opModeConstants.getFireSequence().toString());
@@ -65,7 +65,7 @@ public class Abe_BlueTeam_Left_Autonomous extends LinearOpMode{
         Task_JewelRemove jewelRemove = new Task_JewelRemove(hardwareMap);
         jewelRemove.Init();
         while(jewelRemove.GetTaskStatus() == false) {
-            jewelRemove.PerformTask(telemetry, getRuntime());
+            jewelRemove.PerformTask(telemetry);
             sleep(100);
         }
 
@@ -73,54 +73,17 @@ public class Abe_BlueTeam_Left_Autonomous extends LinearOpMode{
         jewelArm.Init();
         while(jewelArm.GetTaskStatus()==false)
         {
-            jewelArm.PerformTask(telemetry, getRuntime());
+            jewelArm.PerformTask(telemetry);
             sleep(100);
         }
-        //Robot path is where we set the drive action
-        robotPath();
-
-        Task_GlyphManeuver glyphManeuver = new Task_GlyphManeuver(hardwareMap);
-        glyphManeuver.Init();
-        while(glyphManeuver.GetTaskStatus() == false){
-            glyphManeuver.PerformTask(telemetry, getRuntime());
-            sleep(100);
-        }
-
-        Task_GlyphClaw glyphClaw = new Task_GlyphClaw(hardwareMap, OPModeConstants.GlyphClawPosition.OPEN);
-        glyphClaw.Init();
-        while(glyphClaw.GetTaskStatus() == false){
-            glyphClaw.PerformTask(telemetry, getRuntime());
-            sleep(100);
-        }
-
-        glyphManeuver.Reset();
-        robotPush();
-        glyphManeuver.Init();
-        while(glyphManeuver.GetTaskStatus() == false){
-            glyphManeuver.PerformTask(telemetry, getRuntime());
-            sleep(100);
-        }
-
         telemetry.addData("Tasks Completed In ", getRuntime());
         telemetry.update();
         sleep((30 - (int)getRuntime())*1000);
         //TODO -- Make sure to set motor power to 0 and encoder values to "DO NOT USE ENCODERS"
 
     }
-    private void robotPath(){
-        DriveInstructionsHelper firstAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 24.0d);
-        DriveInstructionsHelper secondAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.TURN, 90d);
-        LinkedList initPair = new LinkedList<DriveInstructionsHelper>();
-        initPair.add(firstAction);
-        initPair.add(secondAction);
-        opModeConstants.setDrivePath(initPair);
-    }
-    private void robotPush(){
-        DriveInstructionsHelper pushAction = new DriveInstructionsHelper(OPModeConstants.DriveInstructions.FORWARD, 6.0d);
-        LinkedList initPair = new LinkedList<DriveInstructionsHelper>();
-        initPair.add(pushAction);
-        opModeConstants.setDrivePath(initPair);
-    }
+
+
 }
 
 

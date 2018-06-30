@@ -1,17 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
-
-import java.io.File;
 
 /**
  * Created by Akanksha.Joshi on 25-Dec-2017.
@@ -22,7 +16,6 @@ public class OPModeDriveHelper {
     private  OPModeConstants opModeConstants;
     private  Telemetry telemetry;
     private  HardwareMap hardwareMap;
-    private OPModeGyroHelper gyroHelper;
     DcMotor leftWheel;
     DcMotor rightWheel;
     public static OPModeDriveHelper getInstance()
@@ -30,7 +23,6 @@ public class OPModeDriveHelper {
         if(instance==null)
         {
             instance = new OPModeDriveHelper();
-
         }
         return instance;
     }
@@ -40,11 +32,9 @@ public class OPModeDriveHelper {
         this.hardwareMap = hardwareMap;
         opModeConstants = OPModeConstants.getInstance();
 
-        gyroHelper = OPModeGyroHelper.getInstance();
-        gyroHelper.Init(telemetry,hardwareMap);
-
         leftWheel = hardwareMap.dcMotor.get("left_wheel");
         rightWheel = hardwareMap.dcMotor.get("right_wheel");
+        rightWheel.setDirection(DcMotorSimple.Direction.REVERSE);
     }
     private OPModeDriveHelper(){}
 
@@ -57,30 +47,24 @@ public class OPModeDriveHelper {
         ResetDriveEncoders();
         SetForwardSteering();
         double totalTicks = (OPModeConstants.ticksPerInch * inches / OPModeConstants.gearRatio);
-        totalTicks *=-1;
 
         leftWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftWheel.setPower(GetPower(speed));
         rightWheel.setPower(GetPower(speed));
         leftWheel.setTargetPosition((int)totalTicks);
-        rightWheel.setTargetPosition((int)(totalTicks*-1));
+        rightWheel.setTargetPosition((int)-totalTicks);
         while(leftWheel.isBusy())
         {
-            telemetry.addData("Left Current Position -",leftWheel.getCurrentPosition());
-            telemetry.addData("Right Current Position -",rightWheel.getCurrentPosition());
-            telemetry.update();
-            sleep(10);
+            telemetry.addData("Current Position -",leftWheel.getCurrentPosition());
 
         }
-        SetAllStop();
+        leftWheel.setPower(0);
+        rightWheel.setPower(0);
         ResetDriveEncoders();
         return true;
     }
     public boolean MoveBackward(Double inches)
     {
-        SetAllStop();
-        ResetDriveEncoders();
         return MoveBackward(inches,opModeConstants.getAutoSpeed());
     }
     public boolean TurnRight()
@@ -107,56 +91,22 @@ public class OPModeDriveHelper {
     {
         return Turn(90, speed);
     }
-
-    public boolean Turn(int degrees, OPModeConstants.AutonomousSpeed speed, boolean returnToOriginal){
-        if(!returnToOriginal){
-            return Turn(degrees, speed);
-        }
-        else{
-            opModeConstants.setAutoSpeed(OPModeConstants.AutonomousSpeed.SLOW);
-            ResetDriveEncoders();
-
-
-            gyroTurn(0.30,degrees*-1);
-
-            //////////////////////////Temp Hack to raise arm///////////////////////
-            Task_JewelArm jewelArm = new Task_JewelArm(hardwareMap, OPModeConstants.jewelKickerArmPosition.REST);
-            jewelArm.Init();
-            jewelArm.PerformTask(telemetry,0);
-            jewelArm.Reset();
-            //////////////////////////////End//////////////////////////////////////
-            gyroTurn(0.3,0);
-            SetAllStop();
-            ResetDriveEncoders();
-            return true;
-        }
-    }
     public boolean Turn(int degrees, OPModeConstants.AutonomousSpeed speed)
     {
-        opModeConstants.setAutoSpeed(OPModeConstants.AutonomousSpeed.SLOW);
-        ResetDriveEncoders();
-        SetForwardSteering();
         double inchesToMove = OPModeConstants.degreesToInch * degrees;
         int ticksToMove = (int)Math.round(OPModeConstants.ticksPerInch * inchesToMove / OPModeConstants.gearRatio);
         SetClockWiseSteering();
-
+        if(degrees < 0)
+        {
+           SetCounterClockWiseSteering();
+        }
         leftWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
         leftWheel.setPower(GetPower(speed));
         rightWheel.setPower(GetPower(speed));
-
         leftWheel.setTargetPosition(ticksToMove);
-        rightWheel.setTargetPosition(ticksToMove);
-        int actionCounter = 0;
-        while(leftWheel.isBusy() && actionCounter < 25)
+        while(leftWheel.isBusy())
         {
-            actionCounter++;
-            telemetry.addData("Left Current Position -",leftWheel.getCurrentPosition());
-            telemetry.addData("Right Current Position -",rightWheel.getCurrentPosition());
-            telemetry.update();
-            sleep(200);
-
+            telemetry.addData("Current Position -",leftWheel.getCurrentPosition());
 
         }
         leftWheel.setPower(0);
@@ -169,16 +119,14 @@ public class OPModeDriveHelper {
         ResetDriveEncoders();
         SetReverseSteering();
         double totalTicks = OPModeConstants.ticksPerInch * inches / OPModeConstants.gearRatio;
-
+        totalTicks *=-1;
+        leftWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftWheel.setPower(GetPower(speed));
         rightWheel.setPower(GetPower(speed));
-        leftWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         leftWheel.setTargetPosition((int)totalTicks);
-        rightWheel.setTargetPosition((int)(totalTicks*-1));
         while(leftWheel.isBusy())
         {
-            sleep(200);
+            telemetry.addData("Current Position -",leftWheel.getCurrentPosition());
 
         }
         leftWheel.setPower(0);
@@ -186,96 +134,30 @@ public class OPModeDriveHelper {
         ResetDriveEncoders();
         return true;
     }
-    public double getError(double targetAngle,OPModeGyroHelperV2 gyroHelperV2) {
-
-        double robotError;
-
-        // calculate error in -179 to +180 range using gyro helper uses singleton (
-        robotError = targetAngle - gyroHelper.GetGyroAngle();
-
-        // calculate error using gyrohelper v2 not singleton
-       // robotError = targetAngle - gyroHelperV2.GetGyroAngle(telemetry,hardwareMap);
-
-        while (robotError > 180)  robotError -= 360;
-        while (robotError <= -180) robotError += 360;
-
-        return robotError;
-    }
-    public double getSteer(double error, double PCoeff) {
-        return Range.clip(error * PCoeff, -1, 1);
-    }
-    boolean onHeading(double speed, double angle, double PCoeff,OPModeGyroHelperV2 gyroHelperV2 ) {
-        double   error ;
-        double   steer ;
-        boolean  onTarget = false ;
-        double leftSpeed;
-        double rightSpeed;
-
-        // determine turn power based on +/- error
-        error = getError(angle,gyroHelperV2);
-
-        if (Math.abs(error) <= OPModeConstants.gyroThreshold) {
-            steer = 0.0;
-            leftSpeed  = 0.0;
-            rightSpeed = 0.0;
-            onTarget = true;
-
-        }
-        else {
-            steer = getSteer(error, PCoeff);
-            rightSpeed  = speed * steer;
-            rightSpeed*=-1;
-            leftSpeed = rightSpeed;
-        }
-
-        // Send desired speeds to motors.
-        leftWheel.setPower(leftSpeed);
-        rightWheel.setPower(rightSpeed);
-
-        // Display it for the driver.
-        telemetry.addData("Error is ", error);
-
-        return onTarget;
-    }
-
-    public void gyroTurn (  double speed, double angle) {
-
-        leftWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightWheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        // keep looping while we are still active, and not on heading.
-        OPModeGyroHelperV2 gyroHelperV2 = new OPModeGyroHelperV2();
-        while ( !onHeading(speed, angle, 0.1,gyroHelperV2)) {
-            // Update telemetry & Allow time for other processes to run.
-            telemetry.update();
-
-        }
-        SetAllStop();
-    }
-
     public void SetClockWiseSteering()
     {
-
         leftWheel.setPower(0);
         rightWheel.setPower(0);
+        rightWheel.setDirection(DcMotorSimple.Direction.FORWARD);
     }
     public void SetCounterClockWiseSteering()
     {
-
         leftWheel.setPower(0);
         rightWheel.setPower(0);
+        rightWheel.setDirection(DcMotorSimple.Direction.REVERSE);
     }
     public void SetForwardSteering()
     {
         leftWheel.setPower(0);
         rightWheel.setPower(0);
-
+        rightWheel.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
     public void SetReverseSteering()
     {
         leftWheel.setPower(0);
         rightWheel.setPower(0);
-
+        rightWheel.setDirection(DcMotorSimple.Direction.FORWARD);
 
     }
     public void ResetDriveEncoders()

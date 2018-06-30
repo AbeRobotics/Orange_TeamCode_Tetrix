@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  */
 @TeleOp(name="Gamepad Drive", group="Teleop")
 //@Disabled
-public class Abe_Teleop_Main extends OpMode
+public class TeleopMain extends OpMode
 {
 
 
@@ -28,7 +28,7 @@ public class Abe_Teleop_Main extends OpMode
     double leftWheelPower;
     double rightWheelPower;
 
-    double leftArmDefaultPosition = 0.00;
+    double leftArmDefaultPosition = 0.55;
     double rightArmDefaultPosition = 0.45;
 
     double leftArmPosition = 0.00;
@@ -45,12 +45,13 @@ public class Abe_Teleop_Main extends OpMode
         leftClaw = hardwareMap.servo.get("left_claw");
         rightClaw = hardwareMap.servo.get("right_claw");
         leftArm = hardwareMap.servo.get("left_arm");
-
+        rightArm = hardwareMap.servo.get("right_arm");
 
         leftClaw.setPosition(0.5);
         rightClaw.setPosition(0.5);
 
         leftArm.setPosition(leftArmDefaultPosition);
+        rightArm.setPosition(rightArmDefaultPosition);
 
         rightWheel.setDirection(DcMotorSimple.Direction.REVERSE);
     }
@@ -98,6 +99,14 @@ public class Abe_Teleop_Main extends OpMode
         else
         {
             leftArm.setPosition(leftArmDefaultPosition);
+        }
+        if(gamepad1.b)
+        {
+            rightArm.setPosition(rightArmPosition);
+        }
+        else
+        {
+            rightArm.setPosition(rightArmDefaultPosition);
         }
     }
 }

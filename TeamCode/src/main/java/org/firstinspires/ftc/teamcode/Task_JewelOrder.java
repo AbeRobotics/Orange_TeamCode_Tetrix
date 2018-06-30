@@ -31,24 +31,20 @@ public class Task_JewelOrder extends IOPModeTaskBase {
     @Override
     public void PerformTask(Telemetry telemetry, double elapsedTime) {
         if(elapsedTime > maxTime){
-            telemetry.addData("Time gone", elapsedTime);
-            telemetry.update();
             taskSatisfied = true;
             return;
         }
         //Sanity Check
-         if(opModeConstants.getDetectedOrder() == JewelDetector.JewelOrder.UNKNOWN) {
+         while(opModeConstants.getDetectedOrder() == JewelDetector.JewelOrder.UNKNOWN) {
             JewelDetector.JewelOrder jewelOrder = jewelDetectorFacade.getJewelOrder(jewelDetector);
             opModeConstants.setDetectedOrder(jewelOrder);
             telemetry.addData("Jewel Order Task Sets Order to - ", jewelOrder.toString());
             telemetry.update();
             sleep(100);
         }
-        if(opModeConstants.getDetectedOrder() != JewelDetector.JewelOrder.UNKNOWN) {
-            OPModeConstants.JewelDetectionDisabled = true;
-            jewelDetectorFacade.stop(jewelDetector);
-            taskSatisfied = true;
-        }
+        OPModeConstants.JewelDetectionDisabled = true;
+        jewelDetectorFacade.stop(jewelDetector);
+        taskSatisfied = true;
     }
 
     @Override

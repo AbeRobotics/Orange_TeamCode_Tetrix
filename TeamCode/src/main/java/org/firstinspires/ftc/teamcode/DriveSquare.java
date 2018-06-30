@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 @Autonomous(name="DriveSquare", group="Linear Opmode") // Or @Autonomous
 //@Disabled
-public class Testing_DriveSquare extends LinearOpMode
+public class DriveSquare extends LinearOpMode
 {
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();

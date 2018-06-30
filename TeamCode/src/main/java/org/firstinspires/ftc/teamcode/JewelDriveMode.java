@@ -29,33 +29,54 @@ public class JewelDriveMode {
         }
         return jewelDriveInstance;
     }
-    public boolean performJewelRemovalTask(OPModeConstants.FireSequence fireSequence, HardwareMap hardwareMap, Telemetry telemetry)
+    public boolean performJewelRemovalTask(OPModeConstants.FireSequence fireSequence, HardwareMap hardwareMap)
     {
 
-        OPModeDriveHelper helper = OPModeDriveHelper.getInstance();
-        helper.Init(telemetry,hardwareMap);
+        DcMotor leftWheel;
+        DcMotor rightWheel;
+        leftWheel = hardwareMap.dcMotor.get("left_wheel");
+        rightWheel = hardwareMap.dcMotor.get("right_wheel");
+
+
+        leftWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightWheel.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        int rightWheelPosition = rightWheel.getCurrentPosition();
+        int leftWheelPosition = leftWheel.getCurrentPosition();
+        leftWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightWheel.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftWheel.setPower(0.75);
+        rightWheel.setPower(0.75);
+
+
         //FWD - AKA Right wheel negative, left wheel positive
         if(fireSequence == OPModeConstants.FireSequence.FORWARD) {
-            helper.Turn(25, OPModeConstants.AutonomousSpeed.SLOW,true);
-
-
+            //one rotation
+            leftWheel.setTargetPosition(1440);
+            rightWheel.setTargetPosition(-1440);
         }
         //Back - AKA Right wheel positive, left wheel negative
         if(fireSequence == OPModeConstants.FireSequence.BACKWARD) {
-            helper.Turn(-25, OPModeConstants.AutonomousSpeed.SLOW,true);
-
+            leftWheel.setTargetPosition(-1440);
+            rightWheel.setTargetPosition(1440);
         }
 
+        while(leftWheel.isBusy())
+        {
 
+        }
+        leftWheel.setPower(0);
+        rightWheel.setPower(0);
+        leftWheel.setTargetPosition(leftWheelPosition);
+        rightWheel.setTargetPosition(rightWheelPosition);
+        leftWheel.setPower(0.75);
+        rightWheel.setPower(0.75);
+        while(leftWheel.isBusy())
+        {
 
+        }
+        leftWheel.setPower(0);
+        rightWheel.setPower(0);
         return true;
-    }
-    public final void sleep(long milliseconds) {
-        try {
-            Thread.sleep(milliseconds);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
     }
     public void Reset()
     {
